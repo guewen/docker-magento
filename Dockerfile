@@ -23,11 +23,9 @@ RUN chkconfig nginx on
 #apply patch https://bugzilla.redhat.com/show_bug.cgi?id=1253897 for bzr on python 2.6.6
 RUN yum -y install patch
 
-RUN cd /tmp && wget https://i61173171.restricted.launchpadlibrarian.net/61173171/e9360290-0ecb-11e0-a6ae-001e0bc3957e.txt?token=7Lrc59WtTR6Qn1dhVN7d5PgNx3FVdpTg
+ADD python-bzr.patch /tmp/
 
-RUN cd /tmp && sed -n '1,20p' e9360290-0ecb-11e0-a6ae-001e0bc3957e.txt?token=7Lrc59WtTR6Qn1dhVN7d5PgNx3FVdpTg > bzr_patch.txt
-
-RUN cd /usr/lib64/python2.6/site-packages && patch -p0 -N < /tmp/bzr_patch.txt
+RUN cd /usr/lib64/python2.6/site-packages && patch -p0 -N < /tmp/python-bzr.patch
 
 #install magento files 
 
