@@ -4,7 +4,7 @@ FROM centos:centos6
 
 MAINTAINER paimpozhil@gmail.com
 ENV MAGENTO_VERSION=1.9.2.4
-RUN if [[ -z "$HTTP_HOST" ]]; then export HTTP_HOST="localhost"; fi
+ENV HTTP_HOST=${HTTP_HOST:-localhost}
 
 # Centos default image for some reason does not have tools like Wget/Tar/etc so lets add them
 RUN yum -y install wget
