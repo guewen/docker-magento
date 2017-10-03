@@ -33,9 +33,9 @@ RUN cd /usr/lib64/python2.6/site-packages && patch -p0 -N < /tmp/bzr_patch.txt
 
 #install magento files
 
-RUN mkdir -p /var/www && cd /tmp && curl https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VERSION -o $MAGENTO_VERSION.tar.gz && tar xvf $MAGENTO_VERSION.tar.gz && mv magento-mirror-$MAGENTO_VERSION/* magento-mirror-$MAGENTO_VERSION/.htaccess /var/www/
+RUN mkdir -p /var_www_backup && cd /tmp && curl https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VERSION -o $MAGENTO_VERSION.tar.gz && tar xvf $MAGENTO_VERSION.tar.gz && mv magento-mirror-$MAGENTO_VERSION/* magento-mirror-$MAGENTO_VERSION/.htaccess /var_www_backup/
 
-RUN cd /var/www/ && chmod -R o+w media var && chmod o+w app/etc && rm -f magento-*tar.gz
+RUN cd /var_www_backup/ && chmod -R o+w media var && chmod o+w app/etc && rm -f magento-*tar.gz
 
 COPY magento-sample-data-1.9.1.0.tgz /tmp
 
@@ -43,9 +43,9 @@ RUN cd /tmp && tar -zxvf magento-sample-data-1.9.1.0.tgz
 
 RUN cd /tmp && bzr checkout --lightweight http://bazaar.launchpad.net/~magentoerpconnect-core-editors/magentoerpconnect/module-magento-trunk/
 
-COPY mage-cache.xml /var/www/app/etc/mage-cache.xml
+COPY mage-cache.xml /var_www_backup/app/etc/mage-cache.xml
 
-COPY seturl.php /var/www/seturl.php
+COPY seturl.php /var_www_backup/seturl.php
 
 COPY start.sh /start.sh
 
