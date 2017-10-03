@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo "Waiting for mysql"
-until mysql -h"db" -P"$DB_PORT_3306_TCP_PORT" -u"$DB_ENV_USER" -p"$DB_ENV_PASS" &> /dev/null
+until mysql -h "db" -P "$DB_PORT_3306_TCP_PORT" -u "$DB_ENV_USER" -p"$DB_ENV_PASS" &> /dev/null
 do
   printf "."
   sleep 1
@@ -20,7 +20,7 @@ if [[ -e /firstrun/ok ]]; then
 
 echo "not first run so skipping initialization"
 
-else 
+else
 
 echo "setting the default installer info for magento"
 sed -i "s/<host>localhost/<host>db/g" /var/www/app/etc/config.xml
@@ -65,7 +65,7 @@ php -f /var/www/install.php -- \
 --db_name "magento" \
 --db_user "$DB_ENV_USER" \
 --db_pass "$DB_ENV_PASS" \
---url "http://localhost/" \
+--url "$HTTP_HOST" \
 --skip_url_validation \
 --use_rewrites no \
 --use_secure no \
@@ -87,4 +87,4 @@ fi
 
 service php-fpm start
 
-nginx 
+nginx
