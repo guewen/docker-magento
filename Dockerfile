@@ -15,8 +15,8 @@ RUN yum -y install which openssh-server php-mysql php-gd php-mcrypt php-zip php-
 
 RUN yum -y install tar mysql bzr
 
-ADD default.conf /etc/nginx/conf.d/default.conf
- 
+COPY default.conf /etc/nginx/conf.d/default.conf
+
 RUN chkconfig php-fpm on
 
 RUN chkconfig nginx on
@@ -30,11 +30,11 @@ RUN cd /tmp && sed -n '1,20p' preview.diff > bzr_patch.txt
 
 RUN cd /usr/lib64/python2.6/site-packages && patch -p0 -N < /tmp/bzr_patch.txt
 
-#install magento files 
+#install magento files
 
-RUN mkdir -p /var/www && cd /tmp && curl https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VERSION -o $MAGENTO_VERSION.tar.gz && tar xvf $MAGENTO_VERSION.tar.gz && mv magento-mirror-$MAGENTO_VERSION/* magento-mirror-$MAGENTO_VERSION/.htaccess /var/www/
+RUN mkdir -p /var_www_backup && cd /tmp && curl https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VERSION -o $MAGENTO_VERSION.tar.gz && tar xvf $MAGENTO_VERSION.tar.gz && mv magento-mirror-$MAGENTO_VERSION/* magento-mirror-$MAGENTO_VERSION/.htaccess /var_www_backup/
 
-RUN cd /var/www/ && chmod -R o+w media var && chmod o+w app/etc && rm -f magento-*tar.gz
+RUN cd /var_www_backup/ && chmod -R o+w media var && chmod o+w app/etc && rm -f magento-*tar.gz
 
 COPY magento-sample-data-1.9.1.0.tgz /tmp
 
@@ -42,16 +42,14 @@ RUN cd /tmp && tar -zxvf magento-sample-data-1.9.1.0.tgz
 
 RUN cd /tmp && bzr checkout --lightweight http://bazaar.launchpad.net/~magentoerpconnect-core-editors/magentoerpconnect/module-magento-trunk/
 
-ADD mage-cache.xml /var/www/app/etc/mage-cache.xml
+COPY mage-cache.xml /var_www_backup/app/etc/mage-cache.xml
 
-ADD seturl.php /var/www/seturl.php
+COPY seturl.php /var_www_backup/seturl.php
 
-ADD start.sh /start.sh
+COPY start.sh /start.sh
 
-RUN chmod 0755 /start.sh 
+RUN chmod 0755 /start.sh
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 
 CMD /start.sh
-
-
