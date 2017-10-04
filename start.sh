@@ -64,7 +64,7 @@ else
   --db_name "magento" \
   --db_user "$DB_ENV_USER" \
   --db_pass "$DB_ENV_PASS" \
-  --url "$HTTP_HOST" \
+  --url "$VIRTUAL_HOST" \
   --skip_url_validation \
   --use_rewrites no \
   --use_secure no \
@@ -84,7 +84,7 @@ chown -R apache:apache /var/www/var
 chown -R apache:apache /var/www/media
 chown -R apache:apache /var/www/app/etc
 
-if [[ -n "$HTTP_HOST" ]]; then
+if [[ -n "$VIRTUAL_HOST" ]]; then
   php /var/www/seturl.php
 fi
 
